@@ -1,12 +1,16 @@
 package org.example;
 
 import java.util.Random;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Philosopher extends Thread {
     private int lunches;
     private String name;
     private boolean check = true;
     Random random = new Random();
+
+    ReentrantLock lock = new ReentrantLock();
 
     public Philosopher(int lunches, String name) {
         this.lunches = lunches;
@@ -23,21 +27,14 @@ public class Philosopher extends Thread {
 
     @Override
     public void run() {
-        synchronized (this) {
-            while (lunches != 4) {
-                if (check) {
-                    eating();
-                } else {
-                    thinking();
-                }
+            for (int i = 0; i < 3; i++) {
+                thinking();
+                eating();
             }
-            System.out.println("Философ №" + this.name + " съел три порции блюда.");
-        }
+            System.out.println(this.name + " съел три порции блюда.");
     }
 
-    public void eating() {
-        synchronized (this) {
-            check = false;
+    public synchronized void eating() {
             System.out.println(this.name + " начал обедать.");
             try {
                 sleep(500);
@@ -46,8 +43,6 @@ public class Philosopher extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            check = true;
-        }
 
     }
 

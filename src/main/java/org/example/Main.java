@@ -11,6 +11,5 @@ class Main {
             Philosopher philosopher = new Philosopher(1, "Philosopher №" + (i+1));
             philosopher.start();
         }
-
     }
 }
