@@ -27,14 +27,16 @@ public class Philosopher extends Thread {
 
     @Override
     public void run() {
-            for (int i = 0; i < 3; i++) {
+            while (lunches != 4) {
                 thinking();
                 eating();
             }
             System.out.println(this.name + " съел три порции блюда.");
     }
 
-    public synchronized void eating() {
+    public void eating() {
+        synchronized (Philosopher.class)
+        {
             System.out.println(this.name + " начал обедать.");
             try {
                 sleep(500);
@@ -43,7 +45,7 @@ public class Philosopher extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-
+        }
     }
 
     public void thinking() {
